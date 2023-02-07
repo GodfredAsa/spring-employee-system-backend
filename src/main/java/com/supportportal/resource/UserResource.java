@@ -48,6 +48,11 @@ public class UserResource extends ExceptionHandling {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    @GetMapping("/home")
+    public String getGreetings(){
+        return "Hello World";
+    }
+
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user) {
         authenticate(user.getUsername(), user.getPassword());

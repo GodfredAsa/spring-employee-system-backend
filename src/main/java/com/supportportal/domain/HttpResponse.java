@@ -3,17 +3,17 @@ package com.supportportal.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.http.HttpStatus;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class HttpResponse {
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy hh:mm:ss", timezone = "America/New_York")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy hh:mm:ss", timezone = "GMT")
     private Date timeStamp;
     private int httpStatusCode; // 200, 201, 400, 500
     private HttpStatus httpStatus;
     private String reason;
     private String message;
 
-    // Constructor never used. Can be (and should be) deleted
     public HttpResponse() {}
 
     public HttpResponse(int httpStatusCode, HttpStatus httpStatus, String reason, String message) {
