@@ -4,6 +4,8 @@ jwt:
 
 server:
   port: 8081
+#  DISABLES THE WHITE LABEL ERROR THROWN WHEN NO MAPPING IS FOUND FOR
+# A SPECIFIC URL
 #  error:
 #    whitelabel:
 #      enabled: false
@@ -16,11 +18,11 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-  mvc:
-    throw-exception-if-no-handler-found: true
-  resources:
-    add-mappings: false
+#  mvc:
+#    throw-exception-if-no-handler-found: true
+#  resources:
+#    add-mappings: false

@@ -82,6 +82,9 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 
+//    HANDLES IF THERE IS NOT MAPPING FOR THE RESOURCE BEEN ACCESSED
+//    THIS APPROACH IS NOT THE BEST AS IT DISABLES ALOT OF BEAN CALLED FROM THE CLASS
+//    IMPLEMENTING IT.
 //    @ExceptionHandler(NoHandlerFoundException.class)
 //    public ResponseEntity<HttpResponse> noHandlerFoundException(NoHandlerFoundException e) {
 //        return createHttpResponse(BAD_REQUEST, "There is no mapping for this URL");
