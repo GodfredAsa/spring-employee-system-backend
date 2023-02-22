@@ -63,6 +63,7 @@ public class UserResource extends ExceptionHandling {
         return new ResponseEntity<>(newUser, OK);
     }
 
+//   RequestParam deals with form data so in postman we map them in the form data
     @PostMapping("/add")
     public ResponseEntity<User> addNewUser(@RequestParam("firstName") String firstName,
                                            @RequestParam("lastName") String lastName,
@@ -115,8 +116,19 @@ public class UserResource extends ExceptionHandling {
         return response(OK, USER_DELETED_SUCCESSFULLY);
     }
 
+    @DeleteMapping("/deletes/{userId}")
+    @PreAuthorize("hasAnyAuthority('user:delete')")
+    public ResponseEntity<HttpResponse> deleteUserById(@PathVariable("userId") Long userId) throws IOException, UserNotFoundException {
+        userService.deleteUserById(userId);
+        return response(OK, USER_DELETED_SUCCESSFULLY);
+    }
+
+
     @PostMapping("/updateProfileImage")
-    public ResponseEntity<User> updateProfileImage(@RequestParam("username") String username, @RequestParam(value = "profileImage") MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException {
+    public ResponseEntity<User> updateProfileImage(
+            @RequestParam("username") String username,
+            @RequestParam(value = "profileImage") MultipartFile profileImage) throws UserNotFoundException,
+            UsernameExistException, EmailExistException, IOException, NotAnImageFileException {
         User user = userService.updateProfileImage(username, profileImage);
         return new ResponseEntity<>(user, OK);
     }
