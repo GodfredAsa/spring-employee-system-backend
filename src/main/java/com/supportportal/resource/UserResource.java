@@ -26,6 +26,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.supportportal.constant.FileConstant.*;
 import static com.supportportal.constant.SecurityConstant.JWT_TOKEN_HEADER;
@@ -63,6 +65,7 @@ public class UserResource extends ExceptionHandling {
         return new ResponseEntity<>(newUser, OK);
     }
 
+//   RequestParam deals with form data so in postman we map them in the form data
     @PostMapping("/add")
     public ResponseEntity<User> addNewUser(@RequestParam("firstName") String firstName,
                                            @RequestParam("lastName") String lastName,
@@ -115,8 +118,25 @@ public class UserResource extends ExceptionHandling {
         return response(OK, USER_DELETED_SUCCESSFULLY);
     }
 
+    @DeleteMapping("/deletes/{userId}")
+    @PreAuthorize("hasAnyAuthority('user:delete')")
+    public ResponseEntity<HttpResponse> deleteUserById(@PathVariable("userId") Long userId) throws IOException, UserNotFoundException {
+         Optional<User> user  = userService.getUsers()
+                 .stream()
+                 .filter(u ->  u.getId().equals(userId))
+                 .findFirst();
+
+         if(user.isEmpty()) throw new UserNotFoundException("User with ID " + userId + " does not exits");
+        userService.deleteUserById(userId);
+        return response(OK, USER_DELETED_SUCCESSFULLY);
+    }
+
+
     @PostMapping("/updateProfileImage")
-    public ResponseEntity<User> updateProfileImage(@RequestParam("username") String username, @RequestParam(value = "profileImage") MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException {
+    public ResponseEntity<User> updateProfileImage(
+            @RequestParam("username") String username,
+            @RequestParam(value = "profileImage") MultipartFile profileImage) throws UserNotFoundException,
+            UsernameExistException, EmailExistException, IOException, NotAnImageFileException {
         User user = userService.updateProfileImage(username, profileImage);
         return new ResponseEntity<>(user, OK);
     }

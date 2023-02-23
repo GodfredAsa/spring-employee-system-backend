@@ -33,6 +33,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static com.supportportal.constant.FileConstant.*;
 import static com.supportportal.constant.FileConstant.NOT_AN_IMAGE_FILE;
@@ -139,6 +140,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.save(currentUser);
         saveProfileImage(currentUser, profileImage);
         return currentUser;
+    }
+
+
+    public void deleteUserById(Long userId) throws UserNotFoundException{
+        userRepository.deleteById(userId);
     }
 
     @Override
