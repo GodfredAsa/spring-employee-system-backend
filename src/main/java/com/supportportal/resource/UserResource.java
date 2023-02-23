@@ -26,6 +26,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.supportportal.constant.FileConstant.*;
 import static com.supportportal.constant.SecurityConstant.JWT_TOKEN_HEADER;
@@ -119,6 +121,12 @@ public class UserResource extends ExceptionHandling {
     @DeleteMapping("/deletes/{userId}")
     @PreAuthorize("hasAnyAuthority('user:delete')")
     public ResponseEntity<HttpResponse> deleteUserById(@PathVariable("userId") Long userId) throws IOException, UserNotFoundException {
+         Optional<User> user  = userService.getUsers()
+                 .stream()
+                 .filter(u ->  u.getId().equals(userId))
+                 .findFirst();
+
+         if(user.isEmpty()) throw new UserNotFoundException("User with ID " + userId + " does not exits");
         userService.deleteUserById(userId);
         return response(OK, USER_DELETED_SUCCESSFULLY);
     }
